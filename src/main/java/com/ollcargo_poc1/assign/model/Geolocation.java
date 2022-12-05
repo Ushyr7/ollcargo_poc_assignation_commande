@@ -1,31 +1,34 @@
 package com.ollcargo_poc1.assign.model;
 
-import javax.persistence.Column;
+import java.util.List;
+
+import javax.persistence.ElementCollection;
 import javax.persistence.Embeddable;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Embeddable
 public class Geolocation {
-
-	@Column(insertable = false, updatable = false)
-	private String type;
 	
-	private Coordinates coordinates;
+	@JsonProperty("coordinates")
+	@ElementCollection
+	private List<Double> coordinates;
 
-	public Coordinates getCoordinates() {
+	public List<Double> getCoordinates() {
 		return coordinates;
 	}
 
-	public void setCoordinates(Coordinates coordinates) {
+	public void setCoordinates(List<Double> coordinates) {
 		this.coordinates = coordinates;
 	}
 
 
-	public String getType() {
-		return type;
+	public Geolocation(String type, List<Double> coordinates) {
+		this.coordinates = coordinates;
 	}
 
-	public void setType(String type) {
-		this.type = type;
-	}
+	public Geolocation() {}
+	
+	
 
 }

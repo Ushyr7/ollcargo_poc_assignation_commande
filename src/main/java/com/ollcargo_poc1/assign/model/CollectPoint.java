@@ -1,21 +1,34 @@
 package com.ollcargo_poc1.assign.model;
 
+import javax.persistence.Column;
 import javax.persistence.Embeddable;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Embeddable
 public class CollectPoint {
 
-	
+
+	@Column(name="CollectPointCity")
+	@JsonProperty("city")
 	private String city;
-	
+
+	@Column(name="CollectPointCountry")
+	@JsonProperty("country")
 	private String country;
 
+	@JsonProperty("geolocation")
 	private Geolocation geolocation;
-	
+
+	@Column(name="CollectPointStreet")
+	@JsonProperty("street")
 	private String street;
 
+	@Column(name="CollectPointZipCode")
+	@JsonProperty("zipCode")
 	private String zipCode;
-		
+
+	@JsonProperty("companyName")	
 	private String companyName;
 
 	public String getCity() {
@@ -65,6 +78,18 @@ public class CollectPoint {
 	public void setCompanyName(String companyName) {
 		this.companyName = companyName;
 	}
+
+	public CollectPoint(String city, String country, Geolocation geolocation, String street, String zipCode,
+			String companyName) {
+		this.city = city;
+		this.country = country;
+		this.geolocation = geolocation;
+		this.street = street;
+		this.zipCode = zipCode;
+		this.companyName = companyName;
+	}
+
+	public CollectPoint() {}
 
 	
 	

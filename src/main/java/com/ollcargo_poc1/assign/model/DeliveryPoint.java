@@ -1,100 +1,96 @@
 package com.ollcargo_poc1.assign.model;
 
+import javax.persistence.Column;
 import javax.persistence.Embeddable;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Embeddable
 public class DeliveryPoint {
 	
-	private String deliveryPointCity;
+	@Column(name="DeliveryPointCity")
+	@JsonProperty("city")
+	private String city;
 	
-	private String deliveryPointComplement;
+	@Column(name="DeliveryPointComplement")
+	@JsonProperty("complement")
+	private String complement;
 	
-	private String deliveryPointCountry;
+	@Column(name="DeliveryPointCountry")
+	@JsonProperty("country")
+	private String country;
 	
-	private String clientFirstName;
+	@Column(name="DeliveryPointStreet")
+	@JsonProperty("street")
+	private String street;
 	
-	private String clientLastName;
+	@Column(name="DeliveryPointZipCode")
+	@JsonProperty("zipCode")
+	private String zipCode;
 	
-	private String clientPhone;
+	@JsonProperty("geolocation")
+	private Geolocation geolocation;
+
+	public String getCity() {
+		return city;
+	}
+
+	public void setCity(String city) {
+		this.city = city;
+	}
+
+	public String getComplement() {
+		return complement;
+	}
+
+	public void setComplement(String complement) {
+		this.complement = complement;
+	}
+
+	public String getCountry() {
+		return country;
+	}
+
+	public void setCountry(String country) {
+		this.country = country;
+	}
+
+	public String getStreet() {
+		return street;
+	}
+
+	public void setStreet(String street) {
+		this.street = street;
+	}
+
+	public String getZipCode() {
+		return zipCode;
+	}
+
+	public void setZipCode(String zipCode) {
+		this.zipCode = zipCode;
+	}
+
+	public Geolocation getGeolocation() {
+		return geolocation;
+	}
+
+	public void setGeolocation(Geolocation geolocation) {
+		this.geolocation = geolocation;
+	}
+
+	public DeliveryPoint(String city, String complement, String country, String street, String zipCode,
+			Geolocation geolocation) {
+		this.city = city;
+		this.complement = complement;
+		this.country = country;
+		this.street = street;
+		this.zipCode = zipCode;
+		this.geolocation = geolocation;
+	}
+
+	public DeliveryPoint() {}
 	
-	private String deliveryPointStreet;
+
 	
-	private String deliveryPointZipCode;
-	
-	private Geolocation deliveryPointGeolocation;
-
-	public String getDeliveryPointCity() {
-		return deliveryPointCity;
-	}
-
-	public void setDeliveryPointCity(String deliveryPointCity) {
-		this.deliveryPointCity = deliveryPointCity;
-	}
-
-	public String getDeliveryPointComplement() {
-		return deliveryPointComplement;
-	}
-
-	public void setDeliveryPointComplement(String deliveryPointComplement) {
-		this.deliveryPointComplement = deliveryPointComplement;
-	}
-
-	public String getDeliveryPointCountry() {
-		return deliveryPointCountry;
-	}
-
-	public void setDeliveryPointCountry(String deliveryPointCountry) {
-		this.deliveryPointCountry = deliveryPointCountry;
-	}
-
-	public String getClientFirstName() {
-		return clientFirstName;
-	}
-
-	public void setClientFirstName(String clientFirstName) {
-		this.clientFirstName = clientFirstName;
-	}
-
-	public String getClientLastName() {
-		return clientLastName;
-	}
-
-	public void setClientLastName(String clientLastName) {
-		this.clientLastName = clientLastName;
-	}
-
-	public String getClientPhone() {
-		return clientPhone;
-	}
-
-	public void setClientPhone(String clientPhone) {
-		this.clientPhone = clientPhone;
-	}
-
-	public String getDeliveryPointStreet() {
-		return deliveryPointStreet;
-	}
-
-	public void setDeliveryPointStreet(String deliveryPointStreet) {
-		this.deliveryPointStreet = deliveryPointStreet;
-	}
-
-	public String getDeliveryPointZipCode() {
-		return deliveryPointZipCode;
-	}
-
-	public void setDeliveryPointZipCode(String deliveryPointZipCode) {
-		this.deliveryPointZipCode = deliveryPointZipCode;
-	}
-
-	public Geolocation getDeliveryPointGeolocation() {
-		return deliveryPointGeolocation;
-	}
-
-	public void setDeliveryPointGeolocation(Geolocation deliveryPointGeolocation) {
-		this.deliveryPointGeolocation = deliveryPointGeolocation;
-	}
-
-
-
 }
