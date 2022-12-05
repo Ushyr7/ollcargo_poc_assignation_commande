@@ -11,6 +11,8 @@ Ensuite, il faut utiliser le script livreurs.sql pour peupler la base de donnée
 
 On utilise aussi Kafka, des fiches techniques détaillant l'installation et l'utilisation sont disponibles sur le drive de l'équipe PoC du projet ollcargo
 
+Un example de commande est donnée dans le fichier test.json, il donne un example de structure de données minimal envoyée sur le topic order de kafka, on peut l'utiliser pour envoyer une commande sur le topic à l'aide d'un producer kakfa en ligne de commande. 
+
 Enfin, pour lancer le projet, il suffit d'utiliser:
 
 *mvn spring-boot:run*
