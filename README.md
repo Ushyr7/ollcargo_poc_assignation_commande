@@ -13,4 +13,4 @@ On utilise aussi Kafka, des fiches techniques détaillant l'installation et l'ut
 
 Enfin, pour lancer le projet, il suffit d'utiliser:
 
-*mvn spring-boot:run-
+*mvn spring-boot:run*
