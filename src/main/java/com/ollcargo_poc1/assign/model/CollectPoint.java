@@ -1,14 +1,20 @@
 package com.ollcargo_poc1.assign.model;
 
 import javax.persistence.Column;
-import javax.persistence.Embeddable;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-@Embeddable
+@Entity
 public class CollectPoint {
 
-
+	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	private Integer id;
+	
 	@Column(name="CollectPointCity")
 	@JsonProperty("city")
 	private String city;

@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -36,9 +37,13 @@ public class Order {
     @Embedded
     @JsonProperty("user")
     private User user;
+    
+    @Column(name = "state")
+    private String state;
 
 	
 	public Order() {
+    	setState("EN ATTENTE D'ASSIGNATION");
 	}
 	
   
@@ -63,6 +68,7 @@ public class Order {
     	this.creationDate = o.getCreationDate();
     	this.user = o.getUser();
     	this.parts = o.getParts();
+    	setState("EN ATTENTE D'ASSIGNATION");
     }
 
 	public User getUser() {
@@ -89,6 +95,16 @@ public class Order {
 
 	public void setId(String id) {
 		this.id = id;
+	}
+
+
+	public String getState() {
+		return state;
+	}
+
+
+	public void setState(String state) {
+		this.state = state;
 	}
 
 	

@@ -1,9 +1,15 @@
 package com.ollcargo_poc1.assign.model;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -14,6 +20,8 @@ public class Parts {
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Integer id;
 
+    @OneToOne(cascade = CascadeType.ALL)
+    @LazyCollection(LazyCollectionOption.FALSE)
 	private CollectPoint collectPoint;
 
 	@JsonProperty("fragile")
@@ -22,6 +30,8 @@ public class Parts {
 	@JsonProperty("weight")
 	private int weight;
 	
+    @OneToOne(cascade = CascadeType.ALL)
+    @LazyCollection(LazyCollectionOption.FALSE)
 	private DeliveryPoint deliveryPoint;	
 
 	public CollectPoint getCollectPoint() {
