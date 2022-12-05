@@ -1,11 +1,11 @@
 package com.ollcargo_poc1.assign.model;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
 import org.hibernate.annotations.LazyCollection;
@@ -29,6 +29,10 @@ public class Parts {
 	
 	@JsonProperty("weight")
 	private int weight;
+	
+    @OneToOne(cascade = CascadeType.ALL)
+    @LazyCollection(LazyCollectionOption.FALSE)
+	private Interval interval;
 	
     @OneToOne(cascade = CascadeType.ALL)
     @LazyCollection(LazyCollectionOption.FALSE)
@@ -80,5 +84,14 @@ public class Parts {
 	public void setId(Integer id) {
 		this.id = id;
 	}
+
+	public Interval getInterval() {
+		return interval;
+	}
+
+	public void setInterval(Interval interval) {
+		this.interval = interval;
+	}
+	
 	
 }
