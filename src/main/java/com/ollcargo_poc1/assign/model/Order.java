@@ -1,5 +1,6 @@
 package com.ollcargo_poc1.assign.model;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -107,5 +108,44 @@ public class Order {
 		this.state = state;
 	}
 
+	public int getWeight() {
+		int weight = 0;
+		for (int i = 0; i < parts.size(); i++) {
+			weight += parts.get(i).getWeight();
+		}
+		return weight;
+	}
+
+	public boolean isFragile() {
+		boolean fragile = false;
+		for (int i = 0; i < parts.size(); i++) {
+			fragile = fragile || parts.get(i).isFragile();
+		}
+		return fragile;
+	}
+
+	public List<CollectPoint> getCollectPoint() {
+		List<CollectPoint> collectPoints = new ArrayList<CollectPoint>();
+		for (int i = 0; i < parts.size(); i++) {
+			collectPoints.add(parts.get(i).getCollectPoint());
+		}
+		return collectPoints;
+	}
+
+	public List<DeliveryPoint> getDeliveryPoints() {
+		List<DeliveryPoint> deliveryPoints = new ArrayList<DeliveryPoint>();
+		for (int i = 0; i < parts.size(); i++) {
+			deliveryPoints.add(parts.get(i).getDeliveryPoint());
+		}
+		return deliveryPoints;
+	}
+
+	public List<Interval> getDeliveryTimes() {
+		List<Interval> intervals = new ArrayList<Interval>();
+		for (int i = 0; i < parts.size(); i++) {
+			intervals.add(parts.get(i).getInterval());
+		}
+		return intervals;
+	}
 	
 }

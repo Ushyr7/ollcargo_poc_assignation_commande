@@ -1,122 +1,149 @@
-CREATE TABLE IF NOT EXISTS DeliveryPersons (
-   id int generated always as identity,
-   userId int not null,
-   type char(50) not null,
-   transportation char(50) not null,
-   maxWeight real not null,
-   canDeliverFragile bool not null,
-   mail char(50) not null,
-   primary key(id)
-);
+insert into zone(name, radius) values 
+('Gare de Rouen', 1), 
+('Theatre des arts Rouen', 2),
+('Saint sever Rouen', 1),
+('Gare de Rouen', 2),
+('Les docks', 1.5),
+('Saint sever Rouen', 2),
+('Gare de Rouen', 1),
+('Place Saint-Marc', 0.75),
+('Place Saint-Marc', 1.5),
+('Les docks', 1),
+('Ile Lacroix', 1.25),
+('Saint sever Rouen', 1.5),
+('Ile Lacroix', 2),
+('Saint sever Rouen', 2),
+('Gare de Rouen', 1.5),
+('Theatre des arts Rouen', 2.75),
+('Place Saint-Marc', 1.75),
+('Theatre des arts Rouen', 2);
 
-CREATE TABLE IF NOT EXISTS Zones (
-	id int generated always as identity,
-	name char(100) not null,
-	latitude float(53) not null,
-	longitude float(53) not null, 
-	primary key(id)
-);
+insert into zone_coordinates(zone_id, coordinates) values 
+(1, 1.09409), 
+(1, 49.4488), 
+(2, 1.09006620000002),
+(2, 49.439976),
+(3, -0.574221),
+(3, 43.759137),
+(4, 1.09409), 
+(4, 49.4488), 
+(5, 1.0649952958104831), 
+(5, 49.44593545184686),
+(6, -0.574221),
+(6, 43.759137),
+(7, 1.09409), 
+(7, 49.4488),
+(8, 1.100884511855816), 
+(8, 49.4384031516802),
+(9, 1.100884511855816), 
+(9, 49.4384031516802),
+(10, 1.0649952958104831), 
+(10, 49.44593545184686),
+(11, 1.1014477762800892),
+(11, 49.43278842088243),
+(12, -0.574221),
+(12, 43.759137),
+(13, 1.1014477762800892),
+(13, 49.43278842088243),
+(14, 49.439976),
+(14, -0.574221),
+(15, 1.09409), 
+(15, 49.4488),
+(16, 1.09006620000002),
+(16, 49.439976),
+(17, 1.100884511855816), 
+(17, 49.4384031516802),
+(18, 1.09006620000002),
+(18, 49.439976);
 
-CREATE TABLE IF NOT EXISTS PickUpZones (
-	id int generated always as identity,
-	deliveryPersonId int not null,
-	zoneId int not null,
-	primary key(id),
-	constraint fk_deliverPerson foreign key(deliveryPersonId)
-		references deliveryPersons(id) on delete cascade,
-	constraint fk_zone foreign key(zoneId)
-		references Zones(id) on delete cascade
-);
+insert into delivery_person(user_id, type, transportation, max_weight, can_deliver_fragile, email) values
+(1, 'Livreur', 'voiture', 3000, true, 'livreur1@mail.com'),
+(2, 'VendeurLivreur', 'vélo', 3500, false, 'livreur2@mail.com'),
+(3, 'Livreur', 'à pied', 5000, true, 'livreur3@mail.com'),
+(4, 'Livreur', 'voiture', 9000, true, 'livreur4@mail.com'),
+(5, 'Livreur', 'vélo', 3400, false, 'livreur5@mail.com'),
+(6, 'VendeurLivreur', 'à pied', 6000, false, 'livreur6@mail.com'),
+(7, 'Livreur', 'voiture', 6500, true, 'livreur7@mail.com'),
+(8, 'VendeurLivreur', 'vélo', 7000, true, 'livreur8@mail.com'),
+(9, 'VendeurLivreur', 'à pied', 5500, false, 'livreur9@mail.com'),
+(10, 'Livreur', 'voiture', 10000, false, 'livreur10@mail.com');
 
-CREATE TABLE IF NOT EXISTS DropOffZones (
-	id int generated always as identity,
-	deliveryPersonId int not null,
-	zoneId int not null,
-	primary key(id),
-	constraint fk_deliverPerson foreign key(deliveryPersonId)
-		references deliveryPersons(id) on delete cascade,
-	constraint fk_zone foreign key(zoneId)
-		references Zones(id) on delete cascade
-);
+insert into delivery_person_coordinates(delivery_person_id, coordinates) values
+(2, 1.100251510596058),
+(2, 49.43805432103108),
+(6, 1.0971937926463808),
+(6, 49.43974263831565),
+(8, 1.0837398319888076),
+(8, 49.43127953771687),
+(9, 1.0910622628113484),
+(9, 49.442351741715875);
 
-CREATE TABLE IF NOT EXISTS Schedule (
-	id int generated always as identity,
-	deliveryPersonId int not null,
-	day smallint not null check (day > 0 and day < 8),
-	startTime time not null,
-	endTime time not null,
-	primary key(id),
-	constraint fk_deliverPerson foreign key(deliveryPersonId)
-		references deliveryPersons(id) on delete cascade
-);
+insert into delivery_person_pick_up_zones(delivery_person_id, pick_up_zones_id) values
+(1, 1),
+(3, 2),
+(3, 3),
+(4, 4),
+(5, 5),
+(7, 6),
+(10, 7);
 
-insert into Zones(name, latitude, longitude) values 
-('Gare de Rouen', 49.4488, 1.09409), 
-('Theatre des arts Rouen', 49.439976, 1.09006620000002),
-('Saint sever Rouen', 43.759137, -0.574221);
+insert into delivery_person_drop_off_zones(delivery_person_id,  drop_off_zones_id) values
+(1, 8),
+(2, 9),
+(3, 10),
+(4, 11),
+(5, 12),
+(6, 13),
+(6, 14),
+(7, 15),
+(8, 16),
+(9, 17),
+(10, 18);
 
-insert into deliverypersons(userid, type, transportation, maxweight, candeliverfragile, mail) values
-(1, 'standard', 'voiture', 45, true, 'livreur1@mail.com'),
-(2, 'standard', 'vélo', 19.5, false, 'livreur2@mail.com'),
-(3, 'standard', 'à pied', 10, true, 'livreur3@mail.com'),
-(4, 'standard', 'voiture', 25, true, 'livreur4@mail.com'),
-(5, 'standard', 'vélo', 10, false, 'livreur5@mail.com'),
-(6, 'standard', 'à pied', 12.5, true, 'livreur6@mail.com'),
-(7, 'standard', 'voiture', 25, true, 'livreur7@mail.com'),
-(8, 'standard', 'vélo', 25, true, 'livreur8@mail.com'),
-(9, 'standard', 'à pied', 25, true, 'livreur9@mail.com'),
-(10, 'standard', 'voiture', 25, true, 'livreur10@mail.com');
+insert into schedule (day, start_time, end_time) values
+(1, '08:00:00', '23:00:00'),
+(2, '10:00:00', '19:00:00'),
+(3, '15:00:00', '23:00:00'),
+(4, '09:00:00', '14:00:00'),
+(5, '08:00:00', '23:00:00'),
+(6, '08:00:00', '23:00:00'),
+(7, '18:00:00', '23:00:00'),
+(1, '10:00:00', '14:00:00'),
+(2, '08:00:00', '23:00:00'),
+(3, '08:00:00', '14:00:00'),
+(4, '14:00:00', '23:00:00'),
+(5, '08:00:00', '20:00:00'),
+(6, '18:00:00', '23:00:00'),
+(7, '08:00:00', '21:00:00'),
+(1, '08:00:00', '20:00:00'),
+(2, '12:00:00', '21:00:00'),
+(3, '08:00:00', '23:00:00'),
+(4, '15:00:00', '23:00:00'),
+(5, '08:00:00', '23:00:00'),
+(6, '08:00:00', '23:00:00'),
+(7, '08:00:00', '23:00:00'),
+(2, '16:00:00', '22:30:00');
 
-insert into schedule (deliverypersonid, day, starttime, endtime) values
-(1, 1, '00:00:00', '23:00:00'),
-(1, 2, '00:00:00', '23:00:00'),
-(1, 3, '00:00:00', '23:00:00'),
-(1, 4, '00:00:00', '23:00:00'),
-(1, 5, '00:00:00', '23:00:00'),
-(1, 6, '00:00:00', '23:00:00'),
-(1, 7, '00:00:00', '23:00:00'),
-(2, 1, '00:00:00', '23:00:00'),
-(2, 2, '00:00:00', '23:00:00'),
-(2, 3, '00:00:00', '23:00:00'),
-(2, 4, '00:00:00', '23:00:00'),
-(2, 5, '00:00:00', '23:00:00'),
-(2, 6, '00:00:00', '23:00:00'),
-(2, 7, '00:00:00', '23:00:00'),
-(3, 1, '00:00:00', '23:00:00'),
-(3, 2, '00:00:00', '23:00:00'),
-(3, 3, '00:00:00', '23:00:00'),
-(4, 4, '00:00:00', '23:00:00'),
-(5, 5, '00:00:00', '23:00:00'),
-(6, 6, '00:00:00', '23:00:00'),
-(7, 7, '00:00:00', '23:00:00');
-
-
-insert into pickupzones(deliverypersonid, zoneid) values
-(1,1),
-(1,2),
-(1,3),
-(2,1),
-(3,2),
-(4,3),
-(5,1),
-(6,2),
-(7,3),
-(8,1),
-(9,2),
-(10,3);
-
-insert into dropoffzones(deliverypersonid, zoneid) values
-(1,1),
-(1,2),
-(1,3),
-(2,1),
-(3,2),
-(4,3),
-(5,1),
-(6,2),
-(7,3),
-(8,1),
-(9,2),
-(10,3);
-
-select * from deliveryPersons;
+insert into delivery_person_schedules(delivery_person_id, schedules_id) values
+(1, 1),
+(1, 2),
+(1, 3),
+(1, 4),
+(1, 5),
+(1, 6),
+(1, 7),
+(2, 8),
+(2, 9),
+(2, 10),
+(2, 11),
+(2, 12),
+(2, 13),
+(2, 14),
+(3, 15),
+(3, 16),
+(3, 17),
+(4, 18),
+(5, 19),
+(6, 20),
+(7, 21),
+(8, 22);
