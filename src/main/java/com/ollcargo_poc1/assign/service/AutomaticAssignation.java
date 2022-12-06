@@ -32,6 +32,9 @@ public class AutomaticAssignation {
 
     @Autowired
 	private AssignationRespository assignationRepository;
+
+    @Autowired
+    KafkaProducerService kafkaProducer;
         
     public List<Assignation> automaticPlanification() {      
         List<Order> orders = orderRespository.findFirst300ByStateOrderById("EN ATTENTE D'ASSIGNATION");
@@ -100,6 +103,9 @@ public class AutomaticAssignation {
             assignation.setOrder(order);
             orderRespository.save(order);
             Assignation assignationSaved = assignationRepository.save(assignation);
+
+            // send to assignation topic in kafka
+            kafkaProducer.send(assignationSaved);
             return assignationSaved;
         }
 
