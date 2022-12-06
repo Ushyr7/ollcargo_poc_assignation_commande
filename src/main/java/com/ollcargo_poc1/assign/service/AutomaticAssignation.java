@@ -8,6 +8,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.ollcargo_poc1.assign.model.Assignation;
 import com.ollcargo_poc1.assign.model.CollectPoint;
 import com.ollcargo_poc1.assign.model.DeliveryPerson;
 import com.ollcargo_poc1.assign.model.DeliveryPersonType;
@@ -17,6 +18,7 @@ import com.ollcargo_poc1.assign.model.Interval;
 import com.ollcargo_poc1.assign.model.Order;
 import com.ollcargo_poc1.assign.model.Schedule;
 import com.ollcargo_poc1.assign.model.Zone;
+import com.ollcargo_poc1.assign.repository.AssignationRespository;
 import com.ollcargo_poc1.assign.repository.DeliveryPersonRespository;
 import com.ollcargo_poc1.assign.repository.OrderRepository;
 
@@ -27,11 +29,15 @@ public class AutomaticAssignation {
 
     @Autowired
 	private OrderRepository orderRespository;
-        
-    public void automaticPlan() {      
-        Order order = orderRespository.findFirstByOrderById();
-        List<DeliveryPerson> deliveryPersonMatched = new ArrayList<DeliveryPerson>();
 
+    @Autowired
+	private AssignationRespository assignationRepository;
+        
+    public Assignation automaticPlan() {      
+        Order order = orderRespository.findFirstByOrderById();
+        List<DeliveryPerson> deliveryPersonsMatched = new ArrayList<DeliveryPerson>();
+
+        // find potential delivery persons to make the delivery
         List<DeliveryPerson> deliveryPersons = deliveryPersonRepository.findAll();
         for (int i = 0; i < deliveryPersons.size(); i++) {
             DeliveryPerson deliveryPerson = deliveryPersons.get(i);
@@ -50,13 +56,30 @@ public class AutomaticAssignation {
             }
 
             if (weightCond && fragileCond && scheduleCond && zoneCond) {
-                deliveryPersonMatched.add(deliveryPerson);
+                deliveryPersonsMatched.add(deliveryPerson);
             }
         }
 
-        for (int i = 0; i < deliveryPersonMatched.size(); i++) {
-            System.out.println("Result : Livreur d'id " + deliveryPersonMatched.get(i).getId());
+        if (deliveryPersonsMatched.size() > 0) {
+            // choose a delivery man 
+            DeliveryPerson deliveryPersonChoosen = deliveryPersonsMatched.get(0);
+            for (int i = 0; i < deliveryPersonsMatched.size(); i++) {
+                DeliveryPerson deliveryPerson = deliveryPersonsMatched.get(i);
+                if (deliveryPerson.getType() == DeliveryPersonType.VendeurLivreur) {
+                    deliveryPersonChoosen = deliveryPerson;
+                    break;
+                }
+            }
+
+            // create and return the assignation
+            Assignation assignation = new Assignation();
+            assignation.setDeliveryPerson(deliveryPersonChoosen);
+            assignation.setOrder(order);
+            return assignationRepository.save(assignation);
         }
+
+        // return null if none of the delivery men are compatible
+        return null;
     }
 
     /**
