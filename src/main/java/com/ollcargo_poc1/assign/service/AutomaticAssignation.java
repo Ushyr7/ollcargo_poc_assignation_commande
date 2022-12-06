@@ -33,12 +33,34 @@ public class AutomaticAssignation {
     @Autowired
 	private AssignationRespository assignationRepository;
         
-    public Assignation automaticPlan() {      
-        Order order = orderRespository.findFirstByOrderById();
+    public List<Assignation> automaticPlanification() {      
+        List<Order> orders = orderRespository.findFirst300ByStateOrderById("EN ATTENTE D'ASSIGNATION");
+        List<Assignation> assignations = new ArrayList<Assignation>();
+        List<DeliveryPerson> deliveryPersons = deliveryPersonRepository.findAll();
+
+        for (int i = 0; i < orders.size(); i++) {
+            Order order = orders.get(i);
+            order.setState("EN COURS D'ASSIGNATION");
+            orderRespository.save(order);
+            Assignation assignation = assignOrder(order, deliveryPersons);
+            if (assignation != null) {
+                assignations.add(assignation);
+            }
+        }
+
+        return assignations;        
+    }
+
+    /**
+     * Assign an order to a delivery person
+     * @param order order to assign
+     * @param deliveryPersons list of delivery persons
+     * @return the assignation if a delivery person who matched was found, null otherwise
+     */
+    private Assignation assignOrder(Order order, List<DeliveryPerson> deliveryPersons) {
         List<DeliveryPerson> deliveryPersonsMatched = new ArrayList<DeliveryPerson>();
 
         // find potential delivery persons to make the delivery
-        List<DeliveryPerson> deliveryPersons = deliveryPersonRepository.findAll();
         for (int i = 0; i < deliveryPersons.size(); i++) {
             DeliveryPerson deliveryPerson = deliveryPersons.get(i);
             
@@ -46,7 +68,8 @@ public class AutomaticAssignation {
             boolean fragileCond = order.isFragile() ? deliveryPerson.isCanDeliverFragile() : true;
             boolean scheduleCond = checkSchedule(
                 order.getDeliveryTimes(), deliveryPerson.getSchedules());
-            boolean zoneCond = false;
+
+                boolean zoneCond = false;
             if (deliveryPerson.getType() == DeliveryPersonType.Livreur) {
                 zoneCond = checkPickUpZone(order.getCollectPoint(), deliveryPerson.getPickUpZones())
                 && checkDropOffZone(order.getDeliveryPoints(),deliveryPerson.getDropOffZones());
@@ -61,7 +84,7 @@ public class AutomaticAssignation {
         }
 
         if (deliveryPersonsMatched.size() > 0) {
-            // choose a delivery man 
+            // choose a delivery person 
             DeliveryPerson deliveryPersonChoosen = deliveryPersonsMatched.get(0);
             for (int i = 0; i < deliveryPersonsMatched.size(); i++) {
                 DeliveryPerson deliveryPerson = deliveryPersonsMatched.get(i);
@@ -71,14 +94,18 @@ public class AutomaticAssignation {
                 }
             }
 
-            // create and return the assignation
+            // create the assignation and delete order
             Assignation assignation = new Assignation();
             assignation.setDeliveryPerson(deliveryPersonChoosen);
             assignation.setOrder(order);
-            return assignationRepository.save(assignation);
+            orderRespository.save(order);
+            Assignation assignationSaved = assignationRepository.save(assignation);
+            return assignationSaved;
         }
 
-        // return null if none of the delivery men are compatible
+        // return null if none of the delivery persons are compatible
+        order.setState("EN ATTENTE D'ASSIGNATION");
+        orderRespository.save(order);
         return null;
     }
 
