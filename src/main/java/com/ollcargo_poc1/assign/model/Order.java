@@ -16,6 +16,7 @@ import javax.persistence.TemporalType;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 
@@ -108,6 +109,7 @@ public class Order {
 		this.state = state;
 	}
 
+	@JsonIgnore
 	public int getWeight() {
 		int weight = 0;
 		for (int i = 0; i < parts.size(); i++) {
@@ -116,6 +118,7 @@ public class Order {
 		return weight;
 	}
 
+	@JsonIgnore
 	public boolean isFragile() {
 		boolean fragile = false;
 		for (int i = 0; i < parts.size(); i++) {
@@ -124,6 +127,7 @@ public class Order {
 		return fragile;
 	}
 
+	@JsonIgnore
 	public List<CollectPoint> getCollectPoint() {
 		List<CollectPoint> collectPoints = new ArrayList<CollectPoint>();
 		for (int i = 0; i < parts.size(); i++) {
@@ -132,6 +136,7 @@ public class Order {
 		return collectPoints;
 	}
 
+	@JsonIgnore
 	public List<DeliveryPoint> getDeliveryPoints() {
 		List<DeliveryPoint> deliveryPoints = new ArrayList<DeliveryPoint>();
 		for (int i = 0; i < parts.size(); i++) {
@@ -140,6 +145,7 @@ public class Order {
 		return deliveryPoints;
 	}
 
+	@JsonIgnore
 	public List<Interval> getDeliveryTimes() {
 		List<Interval> intervals = new ArrayList<Interval>();
 		for (int i = 0; i < parts.size(); i++) {
